@@ -9,61 +9,112 @@ This repository contains experimental averaged and linearly-decomposed SERS spec
 ## 📂 Repository structure
 ```
 .
-├── Virus_in_Water/
-│   ├── Least squares fitting of mixture (water).ipynb
-│   ├── test_virus_in_water.csv
-│   ├── SiO2 - only GLF.txt
-│   ├── 05132025 - Average Spectra for Each Concentration - Single Virus in Water with SiO2 - GLF.csv
-│   ├── 05132025 - Average Spectra for Each Concentration - Binary Mixture in Water with SiO2 - GLF.csv
-│   ├── 05132025 - Reconstructed Spectra for Each Concentration - Single Virus in Water with SiO2 - GLF.csv
-│   ├── 05132025 - Reconstructed Spectra for Each Concentration - Binary Mixture in Water with SiO2 - GLF.csv
-│   └── Reconstructed Spectra vs Actual Average Spectra - Water with SiO2 - GLF/
-│       └── *.png  (one figure per virus/mixture + concentration)
-│
-└── Virus_in_Saliva/
-    ├── Least squares fitting of mixture (saliva, with background).ipynb
-    ├── test2_virus_in_saliva.csv
-    ├── 05062025 - saliva (GLF 450-1700).txt
-    ├── SiO2 - only GLF.txt
-    ├── 05142025 - Average Spectra for Each Concentration - Single Virus in Saliva with SiO2 - GLF.csv
-    ├── 05142025 - Average Spectra for Each Concentration - Binary Mixture in Saliva with SiO2 - GLF.csv
-    ├── 05142025 - Reconstructed Spectra for Each Concentration - Single Virus in Saliva with SiO2 - GLF.csv
-    ├── 05142025 - Reconstructed Spectra for Each Concentration - Binary Mixture in Saliva with SiO2 - GLF.csv
-    └── Reconstructed Spectra vs Actual Average Spectra - Saliva with SiO2 - GLF/
-        └── *.png  (one figure per virus/mixture + concentration)
+├── 07172025 - Super spectra BSA (final).ipynb      # End-to-end notebook: load CSV, make splits, build superspectra, train SVR/RF
+├── README.md
+└── data/
+    ├── 07052025 - BSA-thiol_dataset_corrected.csv   # Preprocessed spectra for all four surface modifications (Bare, Cysteamine, Cysteine, MCH)
+    │
+    ├── S1/                                          # Spectra built from a single modification (trivial concat)
+    │   └── train_test_set{1..10}/                   # 10 random splits
+    │       ├── train_dataset{N}.csv
+    │       ├── test_dataset{N}.csv
+    │       ├── train_split/
+    │       │   ├── Bare-BSA.csv
+    │       │   ├── Cysteamine-BSA.csv
+    │       │   ├── Cysteine-BSA.csv
+    │       │   └── MCH-BSA.csv
+    │       └── test_split/
+    │           ├── Bare-BSA.csv
+    │           ├── Cysteamine-BSA.csv
+    │           ├── Cysteine-BSA.csv
+    │           └── MCH-BSA.csv
+    │
+    ├── S2/                                          # S2 superspectra (pairwise concatenation across modifications)
+    │   └── 2x2_{1..10}/
+    │       ├── Bare_Cysteamine_train{N}.csv     ┆ Bare_Cysteamine_test{N}.csv
+    │       ├── Bare_Cysteine_train{N}.csv       ┆ Bare_Cysteine_test{N}.csv
+    │       ├── Bare_MCH_train{N}.csv            ┆ Bare_MCH_test{N}.csv
+    │       ├── Cysteamine_Cysteine_train{N}.csv ┆ Cysteamine_Cysteine_test{N}.csv
+    │       ├── Cysteamine_MCH_train{N}.csv      ┆ Cysteamine_MCH_test{N}.csv
+    │       └── Cysteine_MCH_train{N}.csv        ┆ Cysteine_MCH_test{N}.csv
+    │
+    ├── S3/                                          # S3 superspectra (triplet concatenation)
+    │   └── 3x3_{1..10}/
+    │       ├── Bare_Cysteamine_Cysteine_train{N}.csv  ┆ Bare_Cysteamine_Cysteine_test{N}.csv
+    │       ├── Bare_Cysteamine_MCH_train{N}.csv       ┆ Bare_Cysteamine_MCH_test{N}.csv
+    │       ├── Bare_Cysteine_MCH_train{N}.csv         ┆ Bare_Cysteine_MCH_test{N}.csv
+    │       └── Cysteamine_Cysteine_MCH_train{N}.csv   ┆ Cysteamine_Cysteine_MCH_test{N}.csv
+    │
+    └── S4/                                          # S4 superspectra (concatenate all four modifications)
+        └── 4x4_{1..10}/
+            ├── Bare_Cysteamine_Cysteine_MCH_train{N}.csv
+            └── Bare_Cysteamine_Cysteine_MCH_test{N}.csv
+
 ```
 
 ## 📝 File descriptions
 
-### IPYNB files  
-1. Each of the two `.ipynb` files in both `Virus_in_Water/` and `Virus_in_Saliva/` are used for calculating the linear decomposition coefficients and creating reconstructed vs real spectra plots. 
+### Jupyter notebook
+- **`07172025 - Super spectra BSA (final).ipynb`**
+  - End-to-end pipeline:
+    1. Read `data/07052025 - BSA-thiol_dataset_corrected.csv`.
+    2. Produce 10 random splits.
+    3. Build superspectra `S1–S4` (concatenate unprefixed `[401–1799]` blocks in filename order).
+    4. Train and evaluate SVR & RF.
 
-### CSV files  
-1. Each of the two **test** `.csv` files in both `Virus_in_Water/` and `Virus_in_Saliva/` are used for linear decomposition. They have rows indexed by Raman shift (in cm⁻¹) and the following columns:
+---
 
-| Column name                          | Description                                                      |
-| ------------------------------------ | ---------------------------------------------------------------- |
-| `450, 451, ..., 1700`                | Measured average SERS intensity of corresponding Raman shift (cm⁻¹)|
-| `Label`                              | Virus or mixture name                                              |
-| `Conc`                               | Concentration of the virus, or concentration combination of the mixture |
+### CSV files
 
-2. Each of the two **Single Virus** `.csv` files in both `Virus_in_Water/` and `Virus_in_Saliva/` has rows indexed by Raman shift (in cm⁻¹) and the following columns:
+#### 1) Master dataset (all raw spectra)
+- **`data/07052025 - BSA-thiol_dataset_corrected.csv`**
+- **Rows:** individual BSA spectra (one surface modification per row).
+- **Columns:**
 
-| Column name                          | Description                                                      |
-| ------------------------------------ | ---------------------------------------------------------------- |
-| `Virus`                              | Virus name                                                       |
-| `Concentration`                      | Concentration of the virus                                       |
-| `450, 451, ..., 1700`                | Measured average SERS intensity of corresponding Raman shift (cm⁻¹)|
+| Column               | Description                                                                           |
+|----------------------|---------------------------------------------------------------------------------------|
+| `label`              | Surface modification: `Bare`, `Cysteamine`, `Cysteine`, or `MCH`                      |
+| `conc`               | BSA concentration (units per your experiment/report)                                  |
+| `401, 402, …, 1799`  | SERS intensity at Raman shift (cm⁻¹)                                                  |
 
-3. Each of the two **Binary Mixture** `.csv` files in both `Virus_in_Water/` and `Virus_in_Saliva/` has rows indexed by Raman shift (in cm⁻¹) and the following columns:
+---
 
-| Column name                          | Description                                                      |
-| ------------------------------------ | ---------------------------------------------------------------- |
-| `Virus_A`                            | Name of the first virus component                                |
-| `Concentration_A`                    | Concentration of the first virus component                       |
-| `Virus_B`                            | Name of the second virus component                               |
-| `Concentration_B`                    | Concentration of the second virus component                      |
-| `450, 451, ..., 1700`                | Measured average SERS intensity of corresponding Raman shift (cm⁻¹)|
+#### 2) `S1/` (single-mod superspectra)
+- **Where:** `data/S1/train_test_set{1..10}/`
+  - `train_split/` and `test_split/`: per-mod CSVs
+  - `train_dataset{N}.csv` and `test_dataset{N}.csv`: model-ready tables
+
+- **Columns (all S1 CSVs):**
+
+| Column               | Description                                                                           |
+|----------------------|---------------------------------------------------------------------------------------|
+| `label`              | The single modification in that file (`Bare`, `Cysteamine`, `Cysteine`, `MCH`)        |
+| `conc`               | BSA concentration                                                                     |
+| `401, 402, …, 1799`  | SERS intensity at Raman shift (cm⁻¹)                                                  |
+
+---
+
+#### 3) `S2/`, `S3/`, `S4/` (multi-mod superspectra; concatenated blocks)
+- **Where:**
+  - `data/S2/2x2_{1..10}/*.csv` (pairs)
+  - `data/S3/3x3_{1..10}/*.csv` (triplets)
+  - `data/S4/4x4_{1..10}/*.csv` (all four)
+
+- **Filename → column ordering rule:**  
+  A file named `Bare_Cysteine_train1.csv` has feature columns formed by **concatenating unprefixed** spectral blocks in this order:
+  
+  [401..1799] (for Bare), then [401..1799] (for Cysteine)
+
+  
+- **Columns (all S2–S4 CSVs):**
+
+| Column                 | Description                                                                                 |
+|------------------------|---------------------------------------------------------------------------------------------|
+| `label`                | Non-informative here; simply copies the **last** modification listed in the filename        |
+| `conc`                 | BSA concentration                                                                           |
+| Repeated spectral blocks | Unprefixed `401, 402, …, 1799` for each listed modification, concatenated in filename order |
+
+> Because spectral headers repeat across blocks, select features **by position** (block slicing) rather than by header name. The notebook demonstrates this handling.
 
 ---
 
