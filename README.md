@@ -2,7 +2,10 @@
 
 ## Protein Spectra Dataset
 
-This repository contains experimental averaged and linearly-decomposed SERS spectra for single‐virus and binary‐virus mixtures in two media (water and saliva), both with SiO₂ substrates and Gaussian-Lorentzian baseline correction (GLF).
+This repository contains experimental BSA superspectra datasets generated from surface-enhanced Raman spectroscopy (SERS) measurements.  
+The data include raw and processed spectra collected on SiO₂ substrates with four different surface modifications (`Bare`, `Cysteamine`, `Cysteine`, and `MCH`).  
+Superspectra (`S1–S4`) are formed by concatenating spectral blocks (401–1799 cm⁻¹) from one or more modifications, in the order specified by the filenames.  
+The repository also provides the master dataset, pre-split training/testing subsets, and a Jupyter notebook for generating superspectra and training machine learning models (SVR and RF).
 
 ---
 
