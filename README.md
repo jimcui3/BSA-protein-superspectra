@@ -65,28 +65,6 @@ This repository contains experimental averaged and linearly-decomposed SERS spec
 | `Concentration_B`                    | Concentration of the second virus component                      |
 | `450, 451, ..., 1700`                | Measured average SERS intensity of corresponding Raman shift (cm⁻¹)|
 
-### TXT files  
-1. Each of the two `SiO2 - only GLF.txt` files in both `Virus_in_Water/` and `Virus_in_Saliva/` represent the SiO2 background spectrum.
-
-2. The `05062025 - saliva (GLF 450-1700).txt` file in `Virus_in_Saliva/` represent the saliva background spectrum.
-
-### PNG plots
-Under each `Reconstructed Spectra vs Actual…` folder you’ll find one plot per concentration for each single virus, and one per concentration combination for each binary mixture. 
-
-Each **Single Virus** figure shows:
-1. **Blue solid line** – measured (average) spectrum for this concentration
-2. **Yellow dashed line** – reconstructed spectrum for this concentration
-3. **Green dash-dotted line** – pure (highest concentration) virus component spectra
-4. **Purple dash-dotted line (only exists in saliva)** – saliva component spectra
-5. **Grey dotted line** - SiO2 component spectrum
-
-Each **Binary Mixture** figure shows:
-1. **Blue solid line** – measured (average) spectrum for this concentration
-2. **Yello dashed line** – reconstructed spectrum for this concentration
-3. **Green dash-dotted line** – pure (highest concentration) virus_A component spectra
-4. **Purple dash-dotted line** – pure (highest concentration) virus_B component spectra
-5. **Orange dash-dotted line (only exists in saliva)** – saliva component spectra
-6. **Grey dotted line** - SiO2 component spectrum
 ---
 
 <!-- ## 🚀 Citation -->
